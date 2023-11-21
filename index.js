@@ -1,6 +1,7 @@
 import express from 'express';
 import Pageres from 'pageres';
 import path from 'path';
+import fs from 'fs';
 
 const app = express();
 
@@ -15,16 +16,16 @@ app.get('/capture', async (req, res) => {
         return res.status(400).send('Please provide a delay(seconds) parameter');
     }
 
+    var filename = "<%= date %>_<%= time %>_<%= url %>"
+    var dir = "screenshots"
+
     try {
-        var filename = "<%= date %>_<%= time %>_<%= url %>"
-        var dir = "screenshots"
         await new Pageres({ delay: delay })
             .source(site, ['1920x1080'], { crop: true, filename: filename })
             .destination(dir)
             .run();
 
         const filePath = path.join(__dirname, dir);
-
         console.log("filePath: " + filePath)
 
         // send image as response
@@ -36,7 +37,10 @@ app.get('/capture', async (req, res) => {
         }, 1000);
     } catch (error) {
         console.error('Error capturing screenshot:', error);
-        res.status(500).send(JSON.stringify(error));
+        res.status(500).send("Error capturing screenshot: " + error);
+
+        const filePath = path.join(__dirname, dir);
+        console.log("filePath: " + filePath)
 
         // delete image after sending
         setTimeout(() => {
