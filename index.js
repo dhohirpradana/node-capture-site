@@ -2,6 +2,7 @@ import express from 'express';
 import Pageres from 'pageres';
 import path from 'path';
 import fs from 'fs';
+import imgToPDF from 'image-to-pdf';
 
 const app = express();
 
@@ -28,6 +29,8 @@ app.get('/capture', async (req, res) => {
         const filePath = path.join(__dirname, dir);
         console.log("filePath: " + filePath)
 
+        // image to pdf
+
         // send image as response
         res.sendFile(`${filePath}/${filename}.png`);
         
@@ -42,7 +45,7 @@ app.get('/capture', async (req, res) => {
         const filePath = path.join(__dirname, dir);
         console.log("filePath: " + filePath)
 
-        // delete image after sending
+        // delete image after
         setTimeout(() => {
             fs.unlinkSync(`${filePath}/${filename}.png`);
         }, 1000);

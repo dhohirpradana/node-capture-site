@@ -20,4 +20,7 @@ RUN apt-get update && apt-get install -y chromium
 EXPOSE 3000
 
 # Command to start the Node.js application
-CMD ["node", "index.js"]
+# CMD ["node", "index.js"]
+
+# Command to start the Node.js application
+CMD ["chromium", "--no-sandbox", "index.js"]
